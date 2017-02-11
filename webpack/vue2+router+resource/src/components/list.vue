@@ -1,53 +1,52 @@
 <template>
   <div class="HolyGrail-body">
-    <ul>
-      <li v-for="todo in todos"><router-link :to="'/list/'+todo.id">{{todo.name}}</router-link></li>
-    </ul>
+    <h1>任务列表</h1>
+    <input type="text" v-model="newTodo" v-on:keypress.enter="add">
+    <router-view></router-view>
+    <span>还剩下<b>{{unFLen}}</b>个未完成的任务</span>
+    <router-link to="/list/all">所有任务</router-link>
+    <router-link to="/list/unf">未完成的任务</router-link>
+    <router-link to="/list/f">已完成的任务</router-link>
+    <a href="javascript:;" v-on:click="delf">删除所有已完成的任务</a>
   </div>
 </template>
 
 <script>
+
+import store from '../store.js';
+
 export default {
   data(){
     return {
-      todos:[],
-      ws:""
+      newTodo:''
     }
   },
-  created:function() {
-    this.$on('init', this.init);
-    this.$emit('init');
-    window.onhashchange = function() {
-      if(location.hash != '#/list'){
-        this.ws.close();
-      }
-    }.bind(this);
+  beforeRouteEnter (to, from, next) {
+    store.todosGetStop();
+    store.todosGet();
+    next();
+  },
+  beforeRouteLeave (to, from, next) {
+    store.todosGetStop();
+    next();
+  },
+  computed:{
+    todos(){
+      return store.todos;
+    },
+    unFLen(){
+      return this.todos.filter(todo => !todo.isTick).length;
+    }
   },
   methods:{
-    init:function() {
-      this.ws = new WebSocket("ws://localhost:3000/todos");
-      this.ws.onmessage = function (e) {
-        this.todos = JSON.parse(e.data);
-      }.bind(this);
-      this.ws.onopen = function(e) {
-        this.ws.send("1");
-      }.bind(this);
-
-      var interval = setInterval(function() {
-        if(this.ws.readyState === 1){
-          this.ws.send("1");
-        }else if(this.ws.readyState === 3 && location.hash === '#/list'){
-          this.ws.close();
-          this.ws = new WebSocket("ws://localhost:3000/todos");
-          this.ws.onmessage = function (e) {
-            this.todos = JSON.parse(e.data);
-          }.bind(this);
-        }else{
-          clearInterval(interval);
-          this.ws.close();
-        }
-
-      }.bind(this), 3000);
+    //      新增任务
+    add: function () {
+      store.todosPost(this.newTodo, function() {
+        this.newTodo = '';
+      }.bind(this));
+    },
+    delf: function () {
+      store.todosDelf();
     }
   }
 }

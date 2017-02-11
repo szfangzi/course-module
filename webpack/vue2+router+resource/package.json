@@ -9,6 +9,10 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "express-ws": "^2.0.0",
+    "mysql": "^2.13.0",
     "vue": "^2.1.0",
     "vue-resource": "^1.2.0",
     "vue-router": "^2.2.0"

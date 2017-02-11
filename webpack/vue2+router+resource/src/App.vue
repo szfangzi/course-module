@@ -36,7 +36,7 @@ footer a{
 
 <template>
 <div id="app" class="HolyGrail">
-  <header><h1 @click="click2">这是app的顶部</h1></header>
+  <header><h1>这是app的顶部</h1></header>
   <router-view></router-view>
   <bmenu></bmenu>
 </div>
@@ -45,27 +45,10 @@ footer a{
 
 <script>
 import bmenu from './components/bmenu.vue';
-import eventHub from './event.js';
 
 export default {
   components:{
     bmenu
-  },
-  created:function() {
-    eventHub.$on('test', this.test);
-  },
-  data () {
-    return {
-
-    }
-  },
-  methods:{
-    test(){
-      alert('test!');
-    },
-    click2() {
-      eventHub.$emit('test2');
-    }
   }
 }
 </script>

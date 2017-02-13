@@ -10,7 +10,8 @@
       <router-link to="/list/all">所有任务</router-link>
       <router-link to="/list/unf">未完成的任务</router-link>
       <router-link to="/list/f">已完成的任务</router-link>
-      <a href="javascript:;" v-on:click="delf">删除所有已完成的任务</a>
+      <el-button type="primary" v-on:click="delf">删除所有已完成的任务</el-button>
+      <!-- <a href="javascript:;" v-on:click="delf">删除所有已完成的任务</a> -->
     </div>
   </div>
 </template>

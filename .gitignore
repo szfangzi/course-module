@@ -32,3 +32,4 @@ dist/
 elm-stuff/
 
 .vscode/
+.vscode/setting.json
